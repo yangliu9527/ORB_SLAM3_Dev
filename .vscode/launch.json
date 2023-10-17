@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "g++ - 生成和调试活动文件",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/zhiyu/LYCodes/ORB_SLAM3_Dev/Examples/RGB-D/rgbd_tum",    // 可执行的文件的绝对路径
+            "args": [
+                "/home/zhiyu/LYCodes/ORB_SLAM3_Dev/Vocabulary/ORBvoc.txt", 
+                "/home/zhiyu/DataSet/TUM/rgbd_dataset_freiburg2_desk/TUM2v1.yaml", 
+                "/home/zhiyu/DataSet/TUM/rgbd_dataset_freiburg2_desk", 
+                "/home/zhiyu/DataSet/TUM/rgbd_dataset_freiburg2_desk/associate.txt",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build",
+            "miDebuggerPath": "/usr/bin/gdb",
+
+
+
+        }
+    ]
+}
