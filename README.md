@@ -39,12 +39,12 @@ We provide some examples to process input of a monocular, monocular-inertial, st
 
 Clone the repository:
 ```
-git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
+git clone https://github.com/yangliu9527/ORB_SLAM3_Dev
 ```
 
 We provide a script `build.sh` to build the *Thirdparty* libraries and *ORB-SLAM3*. Please make sure you have installed all required dependencies (see section 2). Execute:
 ```
-cd ORB_SLAM3
+cd ORB_SLAM3_Dev
 chmod +x build.sh
 ./build.sh
 ```
@@ -109,17 +109,17 @@ Execute the following script to process sequences and compute the RMS ATE:
 
 # 7. ROS Examples
 
-### Building the nodes for mono, mono-inertial, stereo, stereo-inertial and RGB-D
+### Building the nodes for mono, mono-inertial, stereo, stereo-inertial, RGB-D and RGB-D Inertial
 Tested with ROS Melodic and ubuntu 18.04.
 
-1. Add the path including *Examples/ROS/ORB_SLAM3* to the ROS_PACKAGE_PATH environment variable. Open .bashrc file:
+1. Add the path including *Examples_added/ROS/ORB_SLAM3_Dev_ROS* to the ROS_PACKAGE_PATH environment variable. Open .bashrc file:
   ```
   gedit ~/.bashrc
   ```
 and add at the end the following line. Replace PATH by the folder where you cloned ORB_SLAM3:
 
   ```
-  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3/Examples/ROS
+  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3_Dev/Examples_added/ROS
   ```
   
 2. Execute `build_ros.sh` script:
@@ -130,41 +130,41 @@ and add at the end the following line. Replace PATH by the folder where you clon
   ```
   
 ### Running Monocular Node
-For a monocular input from topic `/camera/image_raw` run node ORB_SLAM3/Mono. You will need to provide the vocabulary file and a settings file. See the monocular examples above.
+For a monocular input from topic `/camera/image_raw` run node ORB_SLAM3_Dev_ROS/Mono. You will need to provide the vocabulary file and a settings file. See the monocular examples above.
 
   ```
-  rosrun ORB_SLAM3 Mono PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE
+  rosrun ORB_SLAM3_Dev_ROS Mono PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE
   ```
 
 ### Running Monocular-Inertial Node
-For a monocular input from topic `/camera/image_raw` and an inertial input from topic `/imu`, run node ORB_SLAM3/Mono_Inertial. Setting the optional third argument to true will apply CLAHE equalization to images (Mainly for TUM-VI dataset).
+For a monocular input from topic `/camera/image_raw` and an inertial input from topic `/imu`, run node ORB_SLAM3_Dev_ROS/Mono_Inertial. Setting the optional third argument to true will apply CLAHE equalization to images (Mainly for TUM-VI dataset).
 
   ```
-  rosrun ORB_SLAM3 Mono PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE [EQUALIZATION]	
+  rosrun ORB_SLAM3_Dev_ROS Mono PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE [EQUALIZATION]	
   ```
 
 ### Running Stereo Node
-For a stereo input from topic `/camera/left/image_raw` and `/camera/right/image_raw` run node ORB_SLAM3/Stereo. You will need to provide the vocabulary file and a settings file. For Pinhole camera model, if you **provide rectification matrices** (see Examples/Stereo/EuRoC.yaml example), the node will recitify the images online, **otherwise images must be pre-rectified**. For FishEye camera model, rectification is not required since system works with original images:
+For a stereo input from topic `/camera/left/image_raw` and `/camera/right/image_raw` run node ORB_SLAM3_Dev_ROS/Stereo. You will need to provide the vocabulary file and a settings file. For Pinhole camera model, if you **provide rectification matrices** (see Examples/Stereo/EuRoC.yaml example), the node will recitify the images online, **otherwise images must be pre-rectified**. For FishEye camera model, rectification is not required since system works with original images:
 
   ```
-  rosrun ORB_SLAM3 Stereo PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE ONLINE_RECTIFICATION
+  rosrun ORB_SLAM3_Dev_ROS Stereo PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE ONLINE_RECTIFICATION
   ```
 
 ### Running Stereo-Inertial Node
-For a stereo input from topics `/camera/left/image_raw` and `/camera/right/image_raw`, and an inertial input from topic `/imu`, run node ORB_SLAM3/Stereo_Inertial. You will need to provide the vocabulary file and a settings file, including rectification matrices if required in a similar way to Stereo case:
+For a stereo input from topics `/camera/left/image_raw` and `/camera/right/image_raw`, and an inertial input from topic `/imu`, run node ORB_SLAM3_Dev_ROS/Stereo_Inertial. You will need to provide the vocabulary file and a settings file, including rectification matrices if required in a similar way to Stereo case:
 
   ```
-  rosrun ORB_SLAM3 Stereo_Inertial PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE ONLINE_RECTIFICATION [EQUALIZATION]	
+  rosrun ORB_SLAM3_Dev_ROS Stereo_Inertial PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE ONLINE_RECTIFICATION [EQUALIZATION]	
   ```
   
 ### Running RGB_D Node
-For an RGB-D input from topics `/camera/color/image_raw` and `/camera/depth_registered/image_raw`, run node ORB_SLAM3/RGBD. You will need to provide the vocabulary file and a settings file. See the RGB-D example above.
+For an RGB-D input from topics `/camera/color/image_raw` and `/camera/depth_registered/image_raw`, run node ORB_SLAM3_Dev_ROS/RGBD. You will need to provide the vocabulary file and a settings file. See the RGB-D example above.
 
   ```
-  rosrun ORB_SLAM3 RGBD PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE
+  rosrun ORB_SLAM3_Dev_ROS RGBD PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE
   ```
 ### Running RGB_D-Inertial Node
-For an RGB-D inertial input from topics `/camera/rgb/image_raw` and `/camera/aligned_depth_to_color/image_raw`, and an inertial input from topic `/camera/imu`, run node ORB_SLAM3_Dev/RGBD_Inertial. You will need to provide the vocabulary file and a settings file. See the RGB-D inertial example above.
+For an RGB-D inertial input from topics `/camera/rgb/image_raw` and `/camera/aligned_depth_to_color/image_raw`, and an inertial input from topic `/camera/imu`, run node ORB_SLAM3_Dev_ROS/RGBD_Inertial. You will need to provide the vocabulary file and a settings file. See the RGB-D inertial example above.
 ```
 rosrun ORB_SLAM3_Dev_ROS RGBD_Inertial Vocabulary/ORBvoc.txt Examples_added/ROS/ORB_SLAM3_Dev_ROS/D455/D455_RGBDi_factory.yaml
 ```
@@ -175,7 +175,7 @@ rosrun ORB_SLAM3_Dev_ROS RGBD_Inertial Vocabulary/ORBvoc.txt Examples_added/ROS/
   ```
   
   ```
-  rosrun ORB_SLAM3 Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-Inertial/EuRoC.yaml true
+  rosrun ORB_SLAM3_Dev_ROS Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-Inertial/EuRoC.yaml true
   ```
   
   ```
