@@ -1,1 +1,0 @@
-{"title": "APE w.r.t. translation part (m)\n(with SE(3) Umeyama alignment)", "ref_name": "eval_kitti_odo//groundtruth/01.txt", "est_name": "eval_kitti_odo//eval_results/CameraTrajectory_01.txt", "label": "APE (m)"}

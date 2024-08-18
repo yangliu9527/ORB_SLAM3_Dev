@@ -1,1 +1,0 @@
-{"title": "RPE w.r.t. rotation angle in degrees (deg)\nfor delta = 1 (frames) using consecutive pairs\n(with SE(3) Umeyama alignment)", "ref_name": "eval_kitti_odo//groundtruth/01.txt", "est_name": "eval_kitti_odo//eval_results/CameraTrajectory_01.txt", "label": "RPE (deg)"}

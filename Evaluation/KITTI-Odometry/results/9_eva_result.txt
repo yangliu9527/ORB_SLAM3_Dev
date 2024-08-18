@@ -1,0 +1,7 @@
+Sequence: 	 9 
+Trans. err. (%): 	 1.337 
+Rot. err. (deg/100m): 	 0.245 
+ATE (m): 	 5.063 
+RPE (m): 	 0.022 
+RPE (deg): 	 0.050 
+
