@@ -402,6 +402,11 @@ add_executable(stereo_kitti_added
         Examples_added/Stereo/stereo_kitti_added.cc)
 target_link_libraries(stereo_kitti_added ${PROJECT_NAME})
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples_added/Stereo)
+add_executable(stereo_kitti_raw
+        Examples_added/Stereo/stereo_kitti_raw.cc)
+target_link_libraries(stereo_kitti_raw ${PROJECT_NAME})
+
 #Monocular examples
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples_added/Monocular)
 add_executable(mono_kitti_added

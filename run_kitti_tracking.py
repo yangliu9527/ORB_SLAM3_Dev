@@ -30,7 +30,7 @@ for i in seq_ids:
     seq_id = str(i).zfill(4)
     ####################### run the system#######################
     print(f"*******************************Runing {seq_id} sequence*******************************")
-    os.system(f'./Examples_added/Stereo/stereo_kitti_added Vocabulary/ORBvoc.txt ./Config/KITTI-Tracking/KITTI{seq_id}.yaml {dataset_path}/{seq_id}/')
+    os.system(f'./Examples_added/Stereo/stereo_kitti_added Vocabulary/ORBvoc.txt ./Config/KITTI-Tracking/best_23/KITTI{seq_id}.yaml {dataset_path}/{seq_id}/')
     #==========evaluate camera pose estimation==========
     print(f"=======================================evaluating {seq_id} camera pose=======================================")
     os.system(f'cp CameraTrajectory.txt {evaluation_workspace}/results_ego/est_{seq_id}.txt')

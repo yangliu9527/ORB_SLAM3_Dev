@@ -101,3 +101,7 @@ my_settings.txt
 borrar/*
 
 */ExecMean.txt
+
+
+Evaluation/KITTI-Tracking/results_ego/
+Evaluation/KITTI-Odometry/results/
