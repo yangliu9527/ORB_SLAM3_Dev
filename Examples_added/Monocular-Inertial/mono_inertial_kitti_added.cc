@@ -121,7 +121,7 @@ int main(int argc, char **argv)
                     first_imu++;
                 }
 
-    #ifdef COMPILEDWITHC11
+    #if (defined COMPILEDWITHC11) || (defined COMPILEDWITHC14)
             std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
     #else
             std::chrono::monotonic_clock::time_point t1 = std::chrono::monotonic_clock::now();
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
             // Pass the images to the SLAM system
             SLAM.TrackMonocular(imLeft,tframe,vImuMeas);
 
-    #ifdef COMPILEDWITHC11
+    #if (defined COMPILEDWITHC11) || (defined COMPILEDWITHC14)
             std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
     #else
             std::chrono::monotonic_clock::time_point t2 = std::chrono::monotonic_clock::now();

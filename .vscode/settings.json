@@ -77,6 +77,14 @@
         "__tuple": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "csignal": "cpp",
+        "codecvt": "cpp",
+        "future": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
     }
 }
