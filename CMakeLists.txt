@@ -33,10 +33,17 @@ add_definitions(-DCOMPILEDWITHC14)
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
-find_package(OpenCV 3)
-   if(NOT OpenCV_FOUND)
-      message(FATAL_ERROR "OpenCV > 3 not found.")
-   endif()
+
+find_package(OpenCV 4)
+if(NOT OpenCV_FOUND)
+message(FATAL_ERROR "OpenCV > 3 not found.")
+endif()
+
+
+# find_package(OpenCV 3)
+#    if(NOT OpenCV_FOUND)
+#       message(FATAL_ERROR "OpenCV > 3 not found.")
+#    endif()
 
 MESSAGE("OPENCV VERSION:")
 MESSAGE(${OpenCV_VERSION})
