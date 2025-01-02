@@ -1,0 +1,33 @@
+<package format="3">
+  <name>ORB_SLAM3_Dev_ROS2</name>
+  <version>0.0.1</version>
+  <description>
+    ORB_SLAM3: A ROS2 wrapper for the ORB_SLAM3 system.
+  </description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <author>Carlos Campos, Richard Elvira, Juan J. Gomez, Jose M.M. Montiel, Juan D. Tardos</author>
+  <license>GPLv3</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <!-- Dependencies -->
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>sensor_msgs</depend>
+  <depend>image_transport</depend>
+  <depend>cv_bridge</depend>
+  <depend>message_filters</depend>
+  <depend>OpenCV</depend>
+  <!-- <depend>rosidl_default_runtime</depend> -->
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+
+  <!-- Export settings -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

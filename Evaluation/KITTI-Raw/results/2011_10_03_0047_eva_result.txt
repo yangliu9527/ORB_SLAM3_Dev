@@ -1,0 +1,7 @@
+Sequence: 	 2011_10_03_0047 
+Trans. err. (%): 	 6.225 
+Rot. err. (deg/100m): 	 2.343 
+ATE (m): 	 10.837 
+RPE (m): 	 0.097 
+RPE (deg): 	 0.054 
+

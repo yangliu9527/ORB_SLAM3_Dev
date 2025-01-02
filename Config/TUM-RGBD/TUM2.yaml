@@ -1,0 +1,45 @@
+%YAML:1.0
+
+
+Camera1.fx: 520.908620
+Camera1.fy: 521.007327
+Camera1.cx: 325.141442
+Camera1.cy: 249.701764
+
+Camera1.k1: 0.231222
+Camera1.k2: -0.784899
+Camera1.p1: -0.003257
+Camera1.p2: -0.000105
+Camera1.k3: 0.917205
+
+Camera.width: 640
+Camera.height: 480
+
+CameraRGBD.b: 0.0767889
+
+CameraRGBD.DepthMapFactor: 5208.0
+
+Camera.RGB: 1
+
+# Depth threshold
+ThDepth: 40.0
+
+
+#=======================================Features=======================================
+Features.MaxNumber: 100
+Features.MinRadius: 30
+
+#=======================================Local Optimization=======================================
+Optimizer.ActiveWindowSize: 10
+Optimizer.FixedWindowSize: 3
+
+#=======================================Visualization=======================================
+Viewer.Open: 1
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.PointSize: 2.0
+Viewer.ViewPointX: 0.0
+Viewer.ViewPointY: -0.7
+Viewer.ViewPointZ: -1.8
+Viewer.ViewPointF: 500.0
+
