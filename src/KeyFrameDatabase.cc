@@ -610,27 +610,31 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
     {
         unique_lock<mutex> lock(mMutex);
 
-        spConnectedKF = pKF->GetConnectedKeyFrames();
 
-        for(DBoW2::BowVector::const_iterator vit=pKF->mBowVec.begin(), vend=pKF->mBowVec.end(); vit != vend; vit++)
+        spConnectedKF = pKF->GetConnectedKeyFrames();//获取共视帧
+
+        for(DBoW2::BowVector::const_iterator vit=pKF->mBowVec.begin(), vend=pKF->mBowVec.end(); vit != vend; vit++)//遍历当前帧特征单词
         {
+            //找到包含这个词的其他关键帧
             list<KeyFrame*> &lKFs =   mvInvertedFile[vit->first];
 
             for(list<KeyFrame*>::iterator lit=lKFs.begin(), lend= lKFs.end(); lit!=lend; lit++)
             {
                 KeyFrame* pKFi=*lit;
 
+                //不是当前帧
                 if(pKFi->mnPlaceRecognitionQuery!=pKF->mnId)
                 {
                     pKFi->mnPlaceRecognitionWords=0;
+                    //也不是共视帧
                     if(!spConnectedKF.count(pKFi))
                     {
-
+                        //既不是当前帧也不是当前帧共视帧的，共享了同一个单词，将其设置为当前帧的场景重识别帧
                         pKFi->mnPlaceRecognitionQuery=pKF->mnId;
                         lKFsSharingWords.push_back(pKFi);
                     }
                 }
-                pKFi->mnPlaceRecognitionWords++;
+                pKFi->mnPlaceRecognitionWords++;//这帧和当前帧的场景充实别词语数目+1
             }
         }
     }
@@ -638,13 +642,14 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
         return;
 
     // Only compare against those keyframes that share enough words
+    //找到和当前帧共享词数目最大的
     int maxCommonWords=0;
     for(list<KeyFrame*>::iterator lit=lKFsSharingWords.begin(), lend= lKFsSharingWords.end(); lit!=lend; lit++)
     {
         if((*lit)->mnPlaceRecognitionWords>maxCommonWords)
             maxCommonWords=(*lit)->mnPlaceRecognitionWords;
     }
-
+    //最小数目设置为最大数目的80%
     int minCommonWords = maxCommonWords*0.8f;
 
     list<pair<float,KeyFrame*> > lScoreAndMatch;
@@ -656,10 +661,11 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
     {
         KeyFrame* pKFi = *lit;
 
+        //当某帧共享词数目大于最小数目
         if(pKFi->mnPlaceRecognitionWords>minCommonWords)
         {
             nscores++;
-            float si = mpVoc->score(pKF->mBowVec,pKFi->mBowVec);
+            float si = mpVoc->score(pKF->mBowVec,pKFi->mBowVec);//算一个相似度
             pKFi->mPlaceRecognitionScore=si;
             lScoreAndMatch.push_back(make_pair(si,pKFi));
         }
@@ -675,7 +681,7 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
     for(list<pair<float,KeyFrame*> >::iterator it=lScoreAndMatch.begin(), itend=lScoreAndMatch.end(); it!=itend; it++)
     {
         KeyFrame* pKFi = it->second;
-        vector<KeyFrame*> vpNeighs = pKFi->GetBestCovisibilityKeyFrames(10);
+        vector<KeyFrame*> vpNeighs = pKFi->GetBestCovisibilityKeyFrames(10);//找到重识别帧的共视帧
 
         float bestScore = it->first;
         float accScore = bestScore;
@@ -686,6 +692,7 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
             if(pKF2->mnPlaceRecognitionQuery!=pKF->mnId)
                 continue;
 
+            //找到匹配分数最高的
             accScore+=pKF2->mPlaceRecognitionScore;
             if(pKF2->mPlaceRecognitionScore>bestScore)
             {
@@ -694,6 +701,7 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
             }
 
         }
+        
         lAccScoreAndMatch.push_back(make_pair(accScore,pBestKF));
         if(accScore>bestAccScore)
             bestAccScore=accScore;

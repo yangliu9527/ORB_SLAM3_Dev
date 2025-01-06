@@ -18,6 +18,7 @@ rosrun ORB_SLAM3_Dev_ROS Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-I
 
 #============ROS2 nodes==========#
 ros2 run ORB_SLAM3_Dev_ROS2 Mono_Inertial Vocabulary/ORBvoc.txt Examples/Monocular-Inertial/EuRoC.yaml 
-ros2 run ORB_SLAM3_Dev_ROS2 Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-Inertial/EuRoC.yaml 
+ros2 run ORB_SLAM3_Dev_ROS2 Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-Inertial/EuRoC.yaml false
+ros2 run ORB_SLAM3_Dev_ROS2 RGBD_Inertial Vocabulary/ORBvoc.txt Examples_added/ROS/ORB_SLAM3_Dev_ROS/D455/D455_RGBDi_factory.yaml
  
 

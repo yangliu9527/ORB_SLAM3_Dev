@@ -1557,13 +1557,15 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
     vdORBExtract_ms.push_back(mCurrentFrame.mTimeORB_Ext);
 #endif
 
+    //cout << "Tracking start" << endl;
     Track();
+    //cout << "Tracking end" << endl;
 
     return mCurrentFrame.GetPose();
 }
 
 
-Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp, string filename)
+Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double  &timestamp, string filename)
 {
     mImGray = im;
     if(mImGray.channels()==3)

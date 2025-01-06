@@ -108,7 +108,7 @@ void LoopClosing::Run()
 #ifdef REGISTER_TIMES
             std::chrono::steady_clock::time_point time_StartPR = std::chrono::steady_clock::now();
 #endif
-            //该函数会同时检查merge和loop
+            //该函数会同时检查merge和loop, 检测到merge和loop都会返回true
             bool bFindedRegion = NewDetectCommonRegions();
 
 #ifdef REGISTER_TIMES
@@ -325,13 +325,17 @@ bool LoopClosing::CheckNewKeyFrames()
 
 bool LoopClosing::NewDetectCommonRegions()
 {
+    //这个函数的目的就是检测当前关键帧是否和历史某个关键帧有相似性
+    //当前关键帧如果和active map中的关键帧检测到了相似场景，则为回环
+    //当前关键帧如果和非active map中的关键帧检测到了相似场景，则为融合
+
     // To deactivate placerecognition. No loopclosing nor merging will be performed
     if(!mbActiveLC)
         return false;
 
     {
         unique_lock<mutex> lock(mMutexLoopQueue);
-        mpCurrentKF = mlpLoopKeyFrameQueue.front();
+        mpCurrentKF = mlpLoopKeyFrameQueue.front();//取出loop keyframe队列中的最老的一个
         mlpLoopKeyFrameQueue.pop_front();
         // Avoid that a keyframe can be erased while it is being process by this thread
         mpCurrentKF->SetNotErase();
@@ -340,13 +344,14 @@ bool LoopClosing::NewDetectCommonRegions()
         mpLastMap = mpCurrentKF->GetMap();
     }
 
-    if(mpLastMap->IsInertial() && !mpLastMap->GetIniertialBA2())
+    if(mpLastMap->IsInertial() && !mpLastMap->GetIniertialBA2())//惯性模式下如果BA2没做就先不搞回环和融合
     {
         mpKeyFrameDB->add(mpCurrentKF);
         mpCurrentKF->SetErase();
         return false;
     }
 
+    //双目模式下如果没到5帧就先不搞回环
     if(mpTracker->mSensor == System::STEREO && mpLastMap->GetAllKeyFrames().size() < 5) //12
     {
         // cout << "LoopClousure: Stereo KF inserted without check: " << mpCurrentKF->mnId << endl;
@@ -355,6 +360,7 @@ bool LoopClosing::NewDetectCommonRegions()
         return false;
     }
 
+    //地图里没到12帧就先不搞回环和融合
     if(mpLastMap->GetAllKeyFrames().size() < 12)
     {
         // cout << "LoopClousure: Stereo KF inserted without check, map is small: " << mpCurrentKF->mnId << endl;
@@ -373,16 +379,18 @@ bool LoopClosing::NewDetectCommonRegions()
 #ifdef REGISTER_TIMES
     std::chrono::steady_clock::time_point time_StartEstSim3_1 = std::chrono::steady_clock::now();
 #endif
+
+    //这个nLoopNumCoincidences从0到大于0的过程是在底下DetectCommonRegionsFromBoW做的，仅发生在检测回环时上一关键帧找到的相似关键帧大于0小于3
     if(mnLoopNumCoincidences > 0)
     {
         bCheckSpatial = true;
         // Find from the last KF candidates
-        Sophus::SE3d mTcl = (mpCurrentKF->GetPose() * mpLoopLastCurrentKF->GetPoseInverse()).cast<double>();
+        Sophus::SE3d mTcl = (mpCurrentKF->GetPose() * mpLoopLastCurrentKF->GetPoseInverse()).cast<double>();//计算当前帧和上一个当前帧的相对位姿
         g2o::Sim3 gScl(mTcl.unit_quaternion(),mTcl.translation(),1.0);
         g2o::Sim3 gScw = gScl * mg2oLoopSlw;
         int numProjMatches = 0;
         vector<MapPoint*> vpMatchedMPs;
-        bool bCommonRegion = DetectAndReffineSim3FromLastKF(mpCurrentKF, mpLoopMatchedKF, gScw, numProjMatches, mvpLoopMPs, vpMatchedMPs);
+        bool bCommonRegion = DetectAndReffineSim3FromLastKF(mpCurrentKF, mpLoopMatchedKF, gScw, numProjMatches, mvpLoopMPs, vpMatchedMPs);//
         if(bCommonRegion)
         {
 
@@ -480,7 +488,7 @@ bool LoopClosing::NewDetectCommonRegions()
     }
 
     //TODO: This is only necessary if we use a minimun score for pick the best candidates
-    const vector<KeyFrame*> vpConnectedKeyFrames = mpCurrentKF->GetVectorCovisibleKeyFrames();
+    const vector<KeyFrame*> vpConnectedKeyFrames = mpCurrentKF->GetVectorCovisibleKeyFrames();//获取当前帧的共视帧，没用到
 
     // Extract candidates from the bag of words
     vector<KeyFrame*> vpMergeBowCand, vpLoopBowCand;
@@ -490,7 +498,7 @@ bool LoopClosing::NewDetectCommonRegions()
 #ifdef REGISTER_TIMES
         std::chrono::steady_clock::time_point time_StartQuery = std::chrono::steady_clock::now();
 #endif
-        mpKeyFrameDB->DetectNBestCandidates(mpCurrentKF, vpLoopBowCand, vpMergeBowCand,3);
+        mpKeyFrameDB->DetectNBestCandidates(mpCurrentKF, vpLoopBowCand, vpMergeBowCand,3);//从KeyFrame Database里检测与当前关键帧最相似的候选关键帧
 #ifdef REGISTER_TIMES
         std::chrono::steady_clock::time_point time_EndQuery = std::chrono::steady_clock::now();
 
@@ -503,9 +511,12 @@ bool LoopClosing::NewDetectCommonRegions()
         std::chrono::steady_clock::time_point time_StartEstSim3_2 = std::chrono::steady_clock::now();
 #endif
     // Check the BoW candidates if the geometric candidate list is empty
-    //Loop candidates
+    //Loop candidates 
     if(!bLoopDetectedInKF && !vpLoopBowCand.empty())
     {
+        //从候选关键帧里检测回环，如果相似帧大于3帧，直接就判定回环了
+        /*如果检测到小于3帧但大于0帧的相似性，则mnLoopNumCoincidences会大于1小于3，mpLoopLastCurrentKF会被赋值当前关键帧，mg2oLoopSlw，mvpLoopMPs， mvpLoopMatchedMPs都会改变并且
+        下一个关键帧进来时会进入if(mnLoopNumCoincidences > 0){...}里*/
         mbLoopDetected = DetectCommonRegionsFromBoW(vpLoopBowCand, mpLoopMatchedKF, mpLoopLastCurrentKF, mg2oLoopSlw, mnLoopNumCoincidences, mvpLoopMPs, mvpLoopMatchedMPs);
     }
     // Merge candidates

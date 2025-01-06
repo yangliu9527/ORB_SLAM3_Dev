@@ -159,9 +159,9 @@ int main(int argc, char **argv)
     auto image_grabber = std::make_shared<ImageGrabber>(&SLAM, imu_grabber.get(), bEqual, argv[2]);
 
     auto imu_subscription = imu_grabber->create_subscription<sensor_msgs::msg::Imu>(
-        "/imu0", 1000, std::bind(&ImuGrabber::GrabImu, imu_grabber.get(), std::placeholders::_1));
+        "/camera/imu", 1000, std::bind(&ImuGrabber::GrabImu, imu_grabber.get(), std::placeholders::_1));
     auto image_subscription = image_grabber->create_subscription<sensor_msgs::msg::Image>(
-        "/cam0/image_raw", 100, std::bind(&ImageGrabber::GrabImage, image_grabber.get(), std::placeholders::_1));
+        "/camera/color/image_raw", 100, std::bind(&ImageGrabber::GrabImage, image_grabber.get(), std::placeholders::_1));
 
     std::thread sync_thread(&ImageGrabber::SyncWithImu, image_grabber.get());
 
