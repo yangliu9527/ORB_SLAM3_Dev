@@ -689,11 +689,11 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
         for(vector<KeyFrame*>::iterator vit=vpNeighs.begin(), vend=vpNeighs.end(); vit!=vend; vit++)
         {
             KeyFrame* pKF2 = *vit;
+            //判断该帧是否同时也是当前帧的场景重识别帧
             if(pKF2->mnPlaceRecognitionQuery!=pKF->mnId)
                 continue;
-
-            //找到匹配分数最高的
             accScore+=pKF2->mPlaceRecognitionScore;
+            //找到匹配分数最高的
             if(pKF2->mPlaceRecognitionScore>bestScore)
             {
                 pBestKF=pKF2;
@@ -701,8 +701,10 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
             }
 
         }
-        
+
+
         lAccScoreAndMatch.push_back(make_pair(accScore,pBestKF));
+        //同时也记录最高累积分数对应的关键帧
         if(accScore>bestAccScore)
             bestAccScore=accScore;
     }
@@ -722,6 +724,7 @@ void KeyFrameDatabase::DetectNBestCandidates(KeyFrame *pKF, vector<KeyFrame*> &v
 
         if(!spAlreadyAddedKF.count(pKFi))
         {
+            //如果是同一个地图，就是候选回环帧，不是同一个地图就是候选融合帧
             if(pKF->GetMap() == pKFi->GetMap() && vpLoopCand.size() < nNumCandidates)
             {
                 vpLoopCand.push_back(pKFi);

@@ -66,6 +66,15 @@ target_link_libraries(Stereo
 ${LIBS}
 )
 
+# Node for collecting stereo camera
+rosbuild_add_executable(Stereo_Collect
+src/ros_stereo_collect.cc
+)
+
+target_link_libraries(Stereo_Collect
+${LIBS}
+)
+
 # Node for RGB-D camera
 rosbuild_add_executable(RGBD
 src/ros_rgbd.cc

@@ -110,7 +110,7 @@ int main(int argc, char **argv)
   ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::IMU_STEREO, true);
 
   ImuGrabber imugb;
-  ImageGrabber igb(&SLAM, &imugb, sbRect == "true", bEqual,argv[2]);
+  ImageGrabber igb(&SLAM, &imugb, sbRect == "true", bEqual, argv[2]);
 
   if (igb.do_rectify)
   {
@@ -159,6 +159,10 @@ int main(int argc, char **argv)
   std::thread sync_thread(&ImageGrabber::SyncWithImu, &igb);
 
   ros::spin();
+
+  // Stop all threads
+  SLAM.Shutdown();
+  SLAM.SaveTrajectoryKITTIWithTimes("KITTICameraTrajectoryWithTimes.txt");
 
   return 0;
 }
