@@ -23,7 +23,7 @@ Camera.type: "Rectified"
 Camera1.fx: 598.204
 Camera1.fy: 598.204
 Camera1.cx: 581.005
-Camera1.cy: 373.072
+Camera1.cy: 372.072
 
 Camera.width: 1024
 Camera.height: 768
@@ -31,20 +31,12 @@ Camera.height: 768
 Stereo.b: 0.251563
 
 # Camera frames per second 
-Camera.fps: 20
+Camera.fps: 10
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
 
 Stereo.ThDepth: 60.0
-Stereo.T_c1_c2: !!opencv-matrix
-  rows: 4
-  cols: 4
-  dt: f
-  data: [ 0.99874321, -0.02443979 ,-0.04375729,  0.25124805,
-        0.02517959 , 0.99954782,  0.01643605 , 0.00586542,
-        0.04333581, -0.01751718 , 0.99890698, -0.01112642,
-        0.,          0.,          0. ,         1.        ]
 
 
 # Transformation from camera to body-frame (imu)
@@ -52,10 +44,10 @@ IMU.T_b_c1: !!opencv-matrix
    rows: 4
    cols: 4
    dt: f
-   data: [0.02520527, -0.00343789, 0.99967639, 0.07627954,
-        -0.99953411 ,-0.01730445 ,0.02514217 ,0.11145016,
-        0.01721241, -0.99984436, -0.00387246, 0.01149907,
-        0.,0.,0.,1.]
+   data: [-0.0191214,  -0.0125299,    0.999739,   0.0762795,
+        -0.999799,  0.00619054,   -0.019045,    0.11145,
+        -0.00595021,   -0.999902,  -0.0126457,   0.0114991,
+                0,           0,           0,           1]
 
 # IMU noise
 IMU.NoiseGyro: 1.7e-4 #1.6968e-04

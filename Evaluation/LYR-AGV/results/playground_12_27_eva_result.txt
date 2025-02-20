@@ -1,0 +1,7 @@
+Sequence: 	 playground_12_27 
+Trans. err. (%): 	 58.887 
+Rot. err. (deg/100m): 	 87.325 
+ATE (m): 	 1.629 
+RPE (m): 	 0.158 
+RPE (deg): 	 0.486 
+

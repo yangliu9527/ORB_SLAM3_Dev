@@ -22,3 +22,5 @@ ros2 run ORB_SLAM3_Dev_ROS2 Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stere
 ros2 run ORB_SLAM3_Dev_ROS2 RGBD_Inertial Vocabulary/ORBvoc.txt Examples_added/ROS/ORB_SLAM3_Dev_ROS/D455/D455_RGBDi_factory.yaml
  
 
+#===========self==============
+rosrun ORB_SLAM3_Dev_ROS Stereo_Inertial Vocabulary/ORBvoc.txt Config/LYR-AGV/LYR-AGV-20241226.yaml false /camera/infra1/image_rect_raw:=/camera_array/cam0/image_raw  /camera/infra2/image_rect_raw:=/camera_array/cam1/image_raw  /camera/imu:=/livox/imu

@@ -43,6 +43,7 @@ public:
     ORB_SLAM3::System *mpSLAM;
     bool do_rectify;
     cv::Mat M1l, M2l, M1r, M2r;
+
 };
 
 int main(int argc, char **argv)
@@ -122,7 +123,9 @@ int main(int argc, char **argv)
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory_TUM_Format.txt");
     SLAM.SaveTrajectoryTUM("FrameTrajectory_TUM_Format.txt");
     SLAM.SaveTrajectoryKITTI("FrameTrajectory_KITTI_Format.txt");
-    SLAM.SaveTrajectoryKITTIWithTimes("KITTICameraTrajectoryWithTimes.txt");
+    SLAM.SaveTrajectoryKITTI("CameraTrajectory.txt");
+    SLAM.SaveTrajectoryKITTIWithTimes("CameraTrajectoryWithTimes.txt");
+
 
     ros::shutdown();
 
@@ -160,9 +163,11 @@ void ImageGrabber::GrabStereo(const sensor_msgs::ImageConstPtr &msgLeft, const s
         cv::remap(cv_ptrLeft->image, imLeft, M1l, M2l, cv::INTER_LINEAR);
         cv::remap(cv_ptrRight->image, imRight, M1r, M2r, cv::INTER_LINEAR);
         mpSLAM->TrackStereo(imLeft, imRight, cv_ptrLeft->header.stamp.toSec());
+        
     }
     else
     {
         mpSLAM->TrackStereo(cv_ptrLeft->image, cv_ptrRight->image, cv_ptrLeft->header.stamp.toSec());
+
     }
 }

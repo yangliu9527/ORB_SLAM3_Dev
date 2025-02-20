@@ -1,0 +1,7 @@
+Sequence: 	 playground_circle_cut_1_12 
+Trans. err. (%): 	 102.964 
+Rot. err. (deg/100m): 	 94.772 
+ATE (m): 	 1.312 
+RPE (m): 	 0.189 
+RPE (deg): 	 0.976 
+

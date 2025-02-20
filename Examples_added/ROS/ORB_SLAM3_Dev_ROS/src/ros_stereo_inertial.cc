@@ -160,12 +160,17 @@ int main(int argc, char **argv)
 
   ros::spin();
 
+
   // Stop all threads
   SLAM.Shutdown();
-  SLAM.SaveTrajectoryKITTIWithTimes("KITTICameraTrajectoryWithTimes.txt");
+  SLAM.SaveTrajectoryKITTI("CameraTrajectory.txt");
+  SLAM.SaveTrajectoryKITTIWithTimes("CameraTrajectoryWithTimes.txt");
+  // igb.SaveEstimatedResults("CameraTrajectoryAndVelocity.txt");
 
   return 0;
 }
+
+
 
 void ImageGrabber::GrabImageLeft(const sensor_msgs::ImageConstPtr &img_msg)
 {
@@ -366,6 +371,7 @@ void ImageGrabber::SyncWithImu()
       }
 
       mpSLAM->TrackStereo(imLeft, imRight, tImLeft, vImuMeas);
+
 
       std::chrono::milliseconds tSleep(1);
       std::this_thread::sleep_for(tSleep);

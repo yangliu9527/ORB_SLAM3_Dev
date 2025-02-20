@@ -1,0 +1,7 @@
+Sequence: 	 data1_checked_1_12 
+Trans. err. (%): 	 57.020 
+Rot. err. (deg/100m): 	 65.340 
+ATE (m): 	 1.972 
+RPE (m): 	 0.195 
+RPE (deg): 	 1.112 
+

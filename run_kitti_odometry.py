@@ -31,3 +31,4 @@ for i in seq_ids:
         f'cp CameraTrajectory.txt {evaluation_workspace}/results/est_{seq_id}.txt')
     os.system(
         f'python ./Evaluation/KITTI_Tools/evaluate_kitti.py --gt_file={evaluation_workspace}/ground_truth/{seq_id}.txt  --est_file={evaluation_workspace}/results/est_{seq_id}.txt --output_dir={evaluation_workspace}/results/ --align=6dof --seq_id={i}')
+    

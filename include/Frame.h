@@ -154,6 +154,10 @@ public:
         return mOw;
     }
 
+    inline Eigen::Vector3f GetVwb() const {
+        return mVw;
+    }
+
     inline bool HasPose() const {
         return mbHasPose;
     }

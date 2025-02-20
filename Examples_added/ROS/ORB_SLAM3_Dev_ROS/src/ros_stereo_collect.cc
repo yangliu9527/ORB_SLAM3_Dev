@@ -48,11 +48,11 @@ public:
     cv::Mat M1l, M2l, M1r, M2r;
 
     //==========Save Path========
-    string save_path = "/home/zhiyu/DataSet/SelfCollected/LYR_AGV/12_27/files";
+    string save_path = "/home/zhiyu/DataSet/SelfCollected/LYR_AGV/1_12/test_cut_recorded";
     string left_imgs_save_path = save_path + "/image_2";
     string right_imgs_save_path = save_path + "/image_3";
-    string timestamps_save_path = save_path + "/times.txt";
-    string ros_timestamps_save_path = save_path + "/times_ros.txt";
+    string timestamps_save_path = save_path + "/times_relative.txt";
+    string ros_timestamps_save_path = save_path + "/times.txt";
     fstream ts_file;
     fstream ros_ts_file;
     int count = 0;
@@ -100,11 +100,6 @@ int main(int argc, char **argv)
 
     // Stop all threads
     SLAM.Shutdown();
-
-    // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory_TUM_Format.txt");
-    SLAM.SaveTrajectoryTUM("FrameTrajectory_TUM_Format.txt");
-    SLAM.SaveTrajectoryKITTI("FrameTrajectory_KITTI_Format.txt");
 
     ros::shutdown();
 

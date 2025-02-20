@@ -1821,7 +1821,7 @@ void Tracking::Track()
     {
         if(mLastFrame.mTimeStamp>mCurrentFrame.mTimeStamp)
         {
-            cerr << "ERROR: Frame with a timestamp older than previous frame detected!" << endl;
+            cerr << "ERROR: Frame with a timestamp older than previous frame detected! wrong timestamp at FrameID "<<mCurrentFrame.mnId<<", timestamp = "<< setprecision(20)<<mCurrentFrame.mTimeStamp<<endl;
             unique_lock<mutex> lock(mMutexImuQueue);
             mlQueueImuData.clear();
             CreateMapInAtlas();
@@ -2130,7 +2130,10 @@ void Tracking::Track()
 
             }
             if(!bOK)
-                cout << "Fail to track local map!" << endl;
+            {
+                cout << "Fail to track local map! Fail at "<<mCurrentFrame.mnId <<" th Frame." << endl;
+            }
+                
         }
         else
         {
@@ -2733,7 +2736,7 @@ bool Tracking::TrackReferenceKeyFrame()
 
     if(nmatches<15)
     {
-        cout << "TRACK_REF_KF: Less than 15 matches!!\n";
+        cout << "TRACK_REF_KF: Only" <<nmatches<< " points. Less than 15 matches!!\n";
         return false;
     }
 
@@ -3056,7 +3059,9 @@ bool Tracking::TrackLocalMap()
     }
     else
     {
+
         if(mnMatchesInliers<30)
+        //if(mnMatchesInliers<15)
             return false;
         else
             return true;

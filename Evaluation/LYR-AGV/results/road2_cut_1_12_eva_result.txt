@@ -1,0 +1,7 @@
+Sequence: 	 road2_cut_1_12 
+Trans. err. (%): 	 93.630 
+Rot. err. (deg/100m): 	 89.316 
+ATE (m): 	 3.837 
+RPE (m): 	 0.229 
+RPE (deg): 	 1.391 
+

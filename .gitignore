@@ -105,7 +105,8 @@ borrar/*
 
 Evaluation/KITTI-Tracking/results_ego/
 Evaluation/KITTI-Odometry/results/
-
+Evaluation/LYR-AGV/results/
+Evaluation/KITTI-Raw/results
 
 Examples_added/ROS2_ws/log/
 Examples_added/ROS2_ws/install/
