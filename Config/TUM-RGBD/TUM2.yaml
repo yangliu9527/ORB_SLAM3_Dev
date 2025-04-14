@@ -1,6 +1,13 @@
 %YAML:1.0
 
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+File.version: "1.0"
 
+Camera.type: "PinHole"
+
+# Camera calibration and distortion parameters (OpenCV) 
 Camera1.fx: 520.908620
 Camera1.fy: 521.007327
 Camera1.cx: 325.141442
@@ -15,31 +22,60 @@ Camera1.k3: 0.917205
 Camera.width: 640
 Camera.height: 480
 
-CameraRGBD.b: 0.0767889
+# Camera frames per second 
+Camera.fps: 30
 
-CameraRGBD.DepthMapFactor: 5208.0
-
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
 
-# Depth threshold
-ThDepth: 40.0
+# Close/Far threshold. Baseline times.
+Stereo.ThDepth: 40.0
+Stereo.b: 0.0767
+
+# Depth map values factor
+RGBD.DepthMapFactor: 5208.0
 
 
-#=======================================Features=======================================
-Features.MaxNumber: 100
-Features.MinRadius: 30
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
 
-#=======================================Local Optimization=======================================
-Optimizer.ActiveWindowSize: 10
-Optimizer.FixedWindowSize: 3
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1000
 
-#=======================================Visualization=======================================
-Viewer.Open: 1
+# ORB Extractor: Scale factor between levels in the scale pyramid 	
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid	
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast			
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+#--------------------------------------------------------------------------------------------
+# Semantic Parameters
+#--------------------------------------------------------------------------------------------
+Semantic.ObjectLocalBA: 0
+Semantic.Online: 0
+Semantic.SemanticWeightPath: /home/zhiyu/LYCodes/SLIM_SLAMMOT/SemanticWeights/yolov11n-seg.engine
+Semantic.DataSet: tum_rgbd
+Semantic.OfflineSemanticPath: /home/zhiyu/DataSet/TUM/rgbd_dataset_freiburg2_desk/yolo_semantic/
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
 Viewer.CameraSize: 0.08
 Viewer.CameraLineWidth: 3.0
-Viewer.PointSize: 2.0
-Viewer.ViewPointX: 0.0
-Viewer.ViewPointY: -0.7
-Viewer.ViewPointZ: -1.8
-Viewer.ViewPointF: 500.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500.0
 
