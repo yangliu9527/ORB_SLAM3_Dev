@@ -1,0 +1,80 @@
+
+#############################evaluating rgbd_dataset_freiburg3_walking_xyz camera pose#############################
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_xyz_est
+infos:  826 poses, 16.861m path length, 28.762s duration
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_xyz_gt
+infos:  2884 poses, 6.618m path length, 28.832s duration
+--------------------------------------------------------------------------------
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_traj_trajectories
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_traj_xyz
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_traj_rpy
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_traj_speeds
+APE w.r.t. translation part (m)
+(with SE(3) Umeyama alignment)
+
+       max      1.751150
+      mean      0.541956
+    median      0.468050
+       min      0.029696
+      rmse      0.665905
+       sse      366.272776
+       std      0.386929
+
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_ate_raw
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_xyz_evo_ate_map
+
+#############################evaluating rgbd_dataset_freiburg3_walking_static camera pose#############################
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_static_est
+infos:  714 poses, 7.512m path length, 24.832s duration
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_static_gt
+infos:  2484 poses, 0.629m path length, 24.829s duration
+[ERROR] Can't plot speeds of rgbd_dataset_freiburg3_walking_static_gt: bad timestamps: 1341846251.4587 & 1341846251.4587
+--------------------------------------------------------------------------------
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_traj_trajectories
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_traj_xyz
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_traj_rpy
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_traj_speeds
+APE w.r.t. translation part (m)
+(with SE(3) Umeyama alignment)
+
+       max      0.629180
+      mean      0.341283
+    median      0.288725
+       min      0.057880
+      rmse      0.376857
+       sse      101.403244
+       std      0.159835
+
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_ate_raw
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_static_evo_ate_map
+3
+
+#############################evaluating rgbd_dataset_freiburg3_walking_halfsphere camera pose#############################
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_halfsphere_est
+infos:  1017 poses, 22.333m path length, 35.760s duration
+--------------------------------------------------------------------------------
+name:   rgbd_dataset_freiburg3_walking_halfsphere_gt
+infos:  3582 poses, 8.536m path length, 35.810s duration
+--------------------------------------------------------------------------------
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_traj_trajectories
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_traj_xyz
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_traj_rpy
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_traj_speeds
+APE w.r.t. translation part (m)
+(with SE(3) Umeyama alignment)
+
+       max      1.535699
+      mean      0.475204
+    median      0.472026
+       min      0.024345
+      rmse      0.535736
+       sse      291.892110
+       std      0.247374
+
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_ate_raw
+Plot saved to ./Evaluation/TUM-RGBD//results/rgbd_dataset_freiburg3_walking_halfsphere_evo_ate_map
