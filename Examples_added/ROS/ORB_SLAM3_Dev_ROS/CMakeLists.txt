@@ -28,6 +28,18 @@ endif()
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 
+find_package(catkin REQUIRED COMPONENTS
+  compressed_depth_image_transport
+  image_transport              # 新增[6](@ref)
+  cv_bridge                    # 新增[5](@ref)
+  roscpp
+  sensor_msgs
+)
+
+# 添加以下行确保找到库路径
+include_directories(${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
+
 include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/../../../
@@ -81,6 +93,18 @@ src/ros_rgbd.cc
 )
 
 target_link_libraries(RGBD
+${LIBS}
+)
+
+# Node for RGB-D camera
+rosbuild_add_executable(RGBD_compressed
+src/ros_rgbd_compressed.cc
+)
+
+target_link_libraries(RGBD_compressed
+compressed_depth_image_transport  # 核心深度压缩库
+image_transport                    # 基础图像传输接口[3](@ref)
+cv_bridge                          # OpenCV桥接支持[5](@ref)
 ${LIBS}
 )
 
