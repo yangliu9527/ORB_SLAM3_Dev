@@ -68,7 +68,7 @@ Viewer.ViewpointZ: -3.5
 Viewer.ViewpointF: 500.0
 
 
-DataSetPath: "/home/zhiyu/DataSet/KITTI-Odometry/02/"
+DataSetPath: "/home/brain/DataSet/KITTI-Odometry/02/"
 MinSemanticConfidence: 0.1
 MOT: 1
 

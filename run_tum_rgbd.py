@@ -18,7 +18,7 @@ frame_num = parser.parse_args().frame_num
 print(f'evaluate cam_pose:{eva_campose}, plot figures:{plot_flag}')
 
 ########################dataset and workspace path########################
-dataset_path = "/home/zhiyu/DataSet/TUM-RGBD/"
+dataset_path = "/home/brain/DataSet/TUM-RGBD/"
 evaluation_workspace = "./Evaluation/TUM-RGBD/"
 
 #seq_ids =["rgbd_dataset_freiburg3_walking_xyz", "rgbd_dataset_freiburg2_desk"]

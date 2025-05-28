@@ -8,7 +8,7 @@ parser.add_argument("--seq_id", type=str, default=None)
 ######################## evaluation parameters########################
 seq_id = parser.parse_args().seq_id
 ######################## dataset and workspace path########################
-dataset_path = "/home/zhiyu/DataSet/KITTI-Tracking/"
+dataset_path = "/home/brain/DataSet/KITTI-Tracking/"
 evaluation_workspace = "./Evaluation/KITTI-Tracking/"
 
 # correspondences from gt_object_id to est_object_id

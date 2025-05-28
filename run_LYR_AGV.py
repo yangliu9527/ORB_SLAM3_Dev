@@ -7,8 +7,8 @@ parser.add_argument("--seq_id", type=str, default=None)
 ######################## evaluation parameters########################
 seq_id = parser.parse_args().seq_id
 ######################## dataset and workspace path########################
-dataset_path = "/home/zhiyu/DataSet/SelfCollected/LYR_AGV/"
-evaluation_workspace = "/home/zhiyu/LYCodes/ORB_SLAM3_Dev/Evaluation/LYR-AGV"
+dataset_path = "/home/brain/DataSet/SelfCollected/LYR_AGV/"
+evaluation_workspace = "/home/brain/LYCodes/ORB_SLAM3_Dev/Evaluation/LYR-AGV"
 
 # seq ids for all evlaution
 #all_seq_ids = ["road1_cut_20250112","road2_cut_20250112","playground_circle_cut_20250112","data1_checked_20250112","playground_cut_20241227"]

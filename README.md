@@ -127,7 +127,7 @@ chmod +x build_ros2.sh
 2. source the ROS2 worksapce in the ```~/.bashrc```: 
 
   ```
-source /home/zhiyu/LYCodes/ORB_SLAM3_Dev/Examples_added/ROS2_ws/install/setup.bash
+source /home/brain/LYCodes/ORB_SLAM3_Dev/Examples_added/ROS2_ws/install/setup.bash
   ```
 
 # 6. Prepare Data

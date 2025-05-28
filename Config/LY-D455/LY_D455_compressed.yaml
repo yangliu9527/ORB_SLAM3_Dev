@@ -59,9 +59,9 @@ ORBextractor.minThFAST: 7
 #--------------------------------------------------------------------------------------------
 Semantic.ObjectLocalBA: 0
 Semantic.Online: 1
-Semantic.SemanticWeightPath: /home/zhiyu/LYCodes/SDO_SLAM/SemanticWeights/yolov11x-seg.engine
+Semantic.SemanticWeightPath: /home/brain/LYCodes/SDO_SLAM/SemanticWeights/yolov11x-seg.engine
 Semantic.DataSet: issac_sim
-Semantic.OfflineSemanticPath: /home/zhiyu/DataSet/ISAAC_NAV_DATASET/collected_data/jetbot_10234403_1/yolo_semantic/
+Semantic.OfflineSemanticPath: /home/brain/DataSet/ISAAC_NAV_DATASET/collected_data/jetbot_10234403_1/yolo_semantic/
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters

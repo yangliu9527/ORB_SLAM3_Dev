@@ -48,7 +48,7 @@ public:
     cv::Mat M1l, M2l, M1r, M2r;
 
     //==========Save Path========
-    string save_path = "/home/zhiyu/DataSet/SelfCollected/LYR_AGV/1_12/test_cut_recorded";
+    string save_path = "/home/brain/DataSet/SelfCollected/LYR_AGV/1_12/test_cut_recorded";
     string left_imgs_save_path = save_path + "/image_2";
     string right_imgs_save_path = save_path + "/image_3";
     string timestamps_save_path = save_path + "/times_relative.txt";

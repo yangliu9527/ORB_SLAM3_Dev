@@ -61,9 +61,9 @@ ORBextractor.minThFAST: 7
 #--------------------------------------------------------------------------------------------
 Semantic.ObjectLocalBA: 0
 Semantic.Online: 0
-Semantic.SemanticWeightPath: /home/zhiyu/LYCodes/SLIM_SLAMMOT/SemanticWeights/yolov11n-seg.engine
+Semantic.SemanticWeightPath: /home/brain/LYCodes/SLIM_SLAMMOT/SemanticWeights/yolov11n-seg.engine
 Semantic.DataSet: tum_rgbd
-Semantic.OfflineSemanticPath: /home/zhiyu/DataSet/TUM/rgbd_dataset_freiburg2_desk/yolo_semantic/
+Semantic.OfflineSemanticPath: /home/brain/DataSet/TUM/rgbd_dataset_freiburg2_desk/yolo_semantic/
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters

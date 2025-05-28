@@ -7,8 +7,8 @@ parser.add_argument("--seq_id", type=str, default=None)
 ######################## evaluation parameters########################
 seq_id = parser.parse_args().seq_id
 ######################## dataset and workspace path########################
-dataset_path = "/home/zhiyu/DataSet/KITTI-Odometry/"
-evaluation_workspace = "/home/zhiyu/LYCodes/ORB_SLAM3_Dev/Evaluation/KITTI-Odometry"
+dataset_path = "/home/brain/DataSet/KITTI-Odometry/"
+evaluation_workspace = "/home/brain/LYCodes/ORB_SLAM3_Dev/Evaluation/KITTI-Odometry"
 
 # seq ids for all evlaution
 all_seq_ids = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

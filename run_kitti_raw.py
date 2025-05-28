@@ -9,7 +9,7 @@ parser.add_argument("--specify_seq_id", type=int, default=None)
 specify_date = parser.parse_args().specify_date
 specify_seq_id = parser.parse_args().specify_seq_id
 ######################## dataset and workspace path########################
-dataset_path = "/home/zhiyu/DataSet/KITTI-Raw/"
+dataset_path = "/home/brain/DataSet/KITTI-Raw/"
 evaluation_workspace = "./Evaluation/KITTI-Raw/"
 
 # seq ids for all evlaution

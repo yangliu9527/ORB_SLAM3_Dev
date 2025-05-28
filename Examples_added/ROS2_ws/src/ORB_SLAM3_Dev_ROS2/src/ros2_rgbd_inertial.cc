@@ -154,18 +154,18 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  auto node = rclcpp::Node::make_shared("stereo_inertial");
+  auto node = rclcpp::Node::make_shared("rgbd_inertial");
 
 
   ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::IMU_RGBD, true);
   ImuGrabber imu_grabber;
   ImageGrabber image_grabber(&SLAM, &imu_grabber, argv[2]);
 
-  auto sub_imu = node->create_subscription<sensor_msgs::msg::Imu>("/camera/imu", 1000,
+  auto sub_imu = node->create_subscription<sensor_msgs::msg::Imu>("/camera/camera/imu", 1000,
       std::bind(&ImuGrabber::GrabImu, &imu_grabber, std::placeholders::_1));
-  auto sub_img_rgb = node->create_subscription<sensor_msgs::msg::Image>("/camera/color/image_raw", 100,
+  auto sub_img_rgb = node->create_subscription<sensor_msgs::msg::Image>("/camera/camera/color/image_raw", 100,
       std::bind(&ImageGrabber::GrabImageRGB, &image_grabber, std::placeholders::_1));
-  auto sub_img_depth = node->create_subscription<sensor_msgs::msg::Image>("/camera/aligned_depth_to_color/image_raw", 100,
+  auto sub_img_depth = node->create_subscription<sensor_msgs::msg::Image>("/camera/camera/aligned_depth_to_color/image_raw", 100,
       std::bind(&ImageGrabber::GrabImageD, &image_grabber, std::placeholders::_1));
 
   std::thread sync_thread(&ImageGrabber::SyncWithImu, &image_grabber);

@@ -26,7 +26,7 @@ Viewer.ViewpointX: 0.0
 Viewer.ViewpointY: -0.7
 Viewer.ViewpointZ: -3.5
 Viewer.ViewpointF: 500.0
-DataSetPath: /home/zhiyu/DataSet/KITTI-Raw/2011_10_03_drive_0047_sync/2011_10_03/2011_10_03_drive_0047_sync/
+DataSetPath: /home/brain/DataSet/KITTI-Raw/2011_10_03_drive_0047_sync/2011_10_03/2011_10_03_drive_0047_sync/
 MinSemanticConfidence: 0.1
 MOT: 1
 Pc_v: !!opencv-matrix
