@@ -87,6 +87,11 @@ IMU.Frequency: 200.0
 # time delay: t_imu = t_img + td
 TimeDelay: 0.0
 
+
+topics.imu: /livox/imu
+topics.left_image: /camera_array/cam0/image_raw
+topics.right_image: /camera_array/cam1/image_raw
+
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
 #--------------------------------------------------------------------------------------------

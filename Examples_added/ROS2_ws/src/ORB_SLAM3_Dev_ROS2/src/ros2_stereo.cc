@@ -17,7 +17,7 @@ using namespace std;
 class ImageGrabber : public rclcpp::Node
 {
 public:
-    ImageGrabber(ORB_SLAM3::System* pSLAM, const std::string& left_topic, const std::string& right_topic)
+    ImageGrabber(ORB_SLAM3::System *pSLAM, const std::string &left_topic, const std::string &right_topic)
         : Node("ImageGrabber"), mpSLAM(pSLAM)
     {
         this->declare_parameter("do_rectify", false);
@@ -36,12 +36,12 @@ public:
         }
     }
 
-    void GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr& msgLeft, const sensor_msgs::msg::Image::ConstSharedPtr& msgRight);
+    void GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr &msgLeft, const sensor_msgs::msg::Image::ConstSharedPtr &msgRight);
 
 private:
     void LoadRectificationParams();
 
-    ORB_SLAM3::System* mpSLAM;
+    ORB_SLAM3::System *mpSLAM;
     bool do_rectify;
     cv::Mat M1l, M2l, M1r, M2r;
 
@@ -94,14 +94,14 @@ void ImageGrabber::LoadRectificationParams()
     cv::initUndistortRectifyMap(K_r, D_r, R_r, P_r.rowRange(0, 3).colRange(0, 3), cv::Size(cols_r, rows_r), CV_32F, M1r, M2r);
 }
 
-void ImageGrabber::GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr& msgLeft, const sensor_msgs::msg::Image::ConstSharedPtr& msgRight)
+void ImageGrabber::GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr &msgLeft, const sensor_msgs::msg::Image::ConstSharedPtr &msgRight)
 {
     cv_bridge::CvImageConstPtr cv_ptrLeft;
     try
     {
         cv_ptrLeft = cv_bridge::toCvShare(msgLeft);
     }
-    catch (cv_bridge::Exception& e)
+    catch (cv_bridge::Exception &e)
     {
         RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
         return;
@@ -112,7 +112,7 @@ void ImageGrabber::GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr& msg
     {
         cv_ptrRight = cv_bridge::toCvShare(msgRight);
     }
-    catch (cv_bridge::Exception& e)
+    catch (cv_bridge::Exception &e)
     {
         RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
         return;
@@ -131,7 +131,7 @@ void ImageGrabber::GrabStereo(const sensor_msgs::msg::Image::ConstSharedPtr& msg
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
@@ -143,7 +143,25 @@ int main(int argc, char** argv)
 
     ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::STEREO, true);
 
-    auto node = std::make_shared<ImageGrabber>(&SLAM, "/cam0/image_raw", "/cam1/image_raw");
+    string left_topic = "/camera_array/cam0/image_raw";
+    string right_topic = "/camera_array/cam1/image_raw";
+
+    cv::FileStorage fSettings(argv[2], cv::FileStorage::READ);
+    cv::FileNode td_node = fSettings["topics.imu"];
+
+    if (!fSettings["topics.left_image"].empty())
+    {
+        left_topic = fSettings["topics.left_image"].string();
+    }
+
+    if (!fSettings["topics.right_image"].empty())
+    {
+        right_topic = fSettings["topics.right_image"].string();
+    }
+
+    cout << "left image topic: " << left_topic << ", right image topic: " << right_topic << endl;
+
+    auto node = std::make_shared<ImageGrabber>(&SLAM, left_topic, right_topic);
 
     rclcpp::spin(node);
 

@@ -163,12 +163,35 @@ int main(int argc, char **argv)
   ImuGrabber imu_grabber;
   ImageGrabber image_grabber(&SLAM, &imu_grabber, do_rectify, do_equalize, argv[2]);
 
-  auto sub_imu = node->create_subscription<sensor_msgs::msg::Imu>("/imu0", 1000,
-      std::bind(&ImuGrabber::GrabImu, &imu_grabber, std::placeholders::_1));
-  auto sub_img_left = node->create_subscription<sensor_msgs::msg::Image>("/cam0/image_raw", 100,
-      std::bind(&ImageGrabber::GrabImageLeft, &image_grabber, std::placeholders::_1));
-  auto sub_img_right = node->create_subscription<sensor_msgs::msg::Image>("/cam1/image_raw", 100,
-      std::bind(&ImageGrabber::GrabImageRight, &image_grabber, std::placeholders::_1));
+  string imu_topic = "/imu0";
+  string left_topic = "/camera_array/cam0/image_raw";
+  string right_topic = "/camera_array/cam1/image_raw";
+
+  cv::FileStorage fSettings(argv[2], cv::FileStorage::READ);
+  cv::FileNode td_node = fSettings["topics.imu"];
+  if (!fSettings["topics.imu"].empty())
+  {
+    imu_topic = fSettings["topics.imu"].string();
+  }
+
+  if (!fSettings["topics.left_image"].empty())
+  {
+    left_topic = fSettings["topics.left_image"].string();
+  }
+
+  if (!fSettings["topics.right_image"].empty())
+  {
+    right_topic = fSettings["topics.right_image"].string();
+  }
+
+  cout << "imu topic: "<<imu_topic<<", left image topic: "<<left_topic<<", right image topic: "<<right_topic<<endl;
+
+  auto sub_imu = node->create_subscription<sensor_msgs::msg::Imu>(imu_topic, 1000,
+                                                                  std::bind(&ImuGrabber::GrabImu, &imu_grabber, std::placeholders::_1));
+  auto sub_img_left = node->create_subscription<sensor_msgs::msg::Image>(left_topic, 100,
+                                                                         std::bind(&ImageGrabber::GrabImageLeft, &image_grabber, std::placeholders::_1));
+  auto sub_img_right = node->create_subscription<sensor_msgs::msg::Image>(right_topic, 100,
+                                                                          std::bind(&ImageGrabber::GrabImageRight, &image_grabber, std::placeholders::_1));
 
   std::thread sync_thread(&ImageGrabber::SyncWithImu, &image_grabber);
 
