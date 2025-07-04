@@ -3,13 +3,25 @@
 	"tasks": [
         {
             "type": "shell",
-            "label": "Build",
+            "label": "Build_Lib",
             "command":"./build.sh",
             "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+
+        {
+            "type": "shell",
+            "label": "Build",
+            "command":"./build_ros2.sh",
+            "args": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["Build_Lib"]
         }
     ]
 }

@@ -15,6 +15,7 @@ find_package(message_filters REQUIRED)
 
 find_package(OpenCV 4 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
+set(Pangolin_DIR /home/brain/Library/Pangolin-0.6/build/src)
 find_package(Pangolin REQUIRED)
 
 

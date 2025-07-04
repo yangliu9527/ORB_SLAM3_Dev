@@ -8,10 +8,12 @@
             "name": "g++ - 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Examples_added/ROS2_ws/install/ORB_SLAM3_Dev_ROS2/lib/ORB_SLAM3_Dev_ROS2/RGBD",    // 可执行的文件的绝对路径
+            "program": "/home/brain/LYCodes/ORB_SLAM3_Dev/Examples/RGB-D/rgbd_tum",    // 可执行的文件的绝对路径
             "args": [
                 "/home/brain/LYCodes/ORB_SLAM3_Dev/Vocabulary/ORBvoc.txt", 
-                "/home/brain/LYCodes/ORB_SLAM3_Dev/Config/LY-D455/Drone_D455_RGBDi.yaml", 
+                "/home/brain/DataSet/TUM/rgbd_dataset_freiburg2_desk/TUM2v1.yaml", 
+                "/home/brain/DataSet/TUM/rgbd_dataset_freiburg2_desk", 
+                "/home/brain/DataSet/TUM/rgbd_dataset_freiburg2_desk/associate.txt",
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

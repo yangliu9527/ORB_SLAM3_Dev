@@ -19,6 +19,9 @@ File.version: "1.0"
 
 Camera.type: "PinHole"
 
+topics.left_image: /cam0/image_raw
+topics.right_image: /cam1/image_raw
+topics.imu: /imu0
 # Camera calibration and distortion parameters (OpenCV) 
 Camera1.fx: 458.654
 Camera1.fy: 457.296

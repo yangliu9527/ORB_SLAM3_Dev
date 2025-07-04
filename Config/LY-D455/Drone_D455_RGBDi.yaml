@@ -1,0 +1,143 @@
+%YAML:1.0
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+File.version: "1.0"
+Camera.type: "PinHole"
+
+# For online running ROS topics
+topics.rgb: /camera/color/image_raw
+topics.depth: /camera/aligned_depth_to_color/image_raw
+topics.imu: /camera/imu
+
+Camera1.fx: 386.425
+Camera1.fy: 385.997
+Camera1.cx: 326.544
+Camera1.cy: 243.87
+
+Camera1.k1: -0.0555079
+Camera1.k2: 0.0661777
+Camera1.p1: 0.000327233
+Camera1.p2: 0.000728194
+
+# Camera resolution
+Camera.width: 640
+Camera.height: 480
+
+# Camera frames per second 
+Camera.fps: 30
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
+
+# Image scale, it changes the image size to be processed (<1.0: reduce, >1.0: increase)
+Camera.imageScale: 1.0 # 0.5 #0.7071 # 1/sqrt(2)
+
+# Close/Far threshold. Baseline times.
+ThDepth: 40.0
+
+# stereo baseline times fx
+Camera.bf: 46.01
+
+# Close/Far threshold. Baseline times.
+Stereo.ThDepth: 40.0
+Stereo.b: 0.07732
+
+# Deptmap values factor
+RGBD.DepthMapFactor: 1000.0
+
+# Transformation from body-frame (imu) to left camera
+Tbc: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: f
+   data: [ 0.99999, 0.00424297, 0.00164066, 0.0288194,
+           -0.00424849, 0.999985, 0.00337986, 0.00733094,
+           -0.0016263, -0.00338679, 0.999993, 0.0157225,
+           0.0, 0.0, 0.0, 1.0]
+
+
+# Do not insert KFs when recently lost
+InsertKFsWhenLost: 0
+
+# IMU noise (Use those from VINS-mono)
+IMU.NoiseGyro: 0.0015360335240554742 # 3 # 2.44e-4 #1e-3 # rad/s^0.5
+IMU.NoiseAcc:  0.012454017833627063 #2 # 1.47e-3 #1e-2 # m/s^1.5
+IMU.GyroWalk: 1.5923930765140014e-05 # rad/s^1.5
+IMU.AccWalk: 0.00022988219546424445 # m/s^2.5
+IMU.Frequency: 200.0
+
+IMU.T_b_c1: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: f
+   data: [ 0.99999, 0.00424297, 0.00164066, 0.0288194,
+           -0.00424849, 0.999985, 0.00337986, 0.00733094,
+           -0.0016263, -0.00338679, 0.999993, 0.0157225,
+           0.0, 0.0, 0.0, 1.0]
+
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1250
+
+# ORB Extractor: Scale factor between levels in the scale pyramid 	
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid	
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast			
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+#--------------------------------------------------------------------------------------------
+# Semantic Parameters
+#--------------------------------------------------------------------------------------------
+Semantic.ObjectLocalBA: 0
+Semantic.Online: 1
+Semantic.SemanticWeightPath: /home/brain/LYCodes/SDO_SLAM/SemanticWeights/yolov11x-seg.engine
+Semantic.DataSet: issac_sim
+Semantic.OfflineSemanticPath: /home/brain/DataSet/SelfCollected/isaacsim/collected_data/jetbot_10234403_1/yolo_semantic/
+
+#--------------------------------------------------------------------------------------------
+# Navigation Parameters
+#--------------------------------------------------------------------------------------------
+GridMap.Resolution: 0.05
+GridMap.Xsize: 50.0
+GridMap.Ysize: 50.0
+GridMap.Zsize: 50.0 
+GridMap.ObstacleInflation: 0.15
+GridMap.GroundHeight: 0.4 #y-axis point to the ground
+GridMap.VirtualCeilHeight: -2.0 #y-axis point to the ground
+Robot.Type: 1
+
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.Open: 1
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -3.5
+Viewer.ViewpointF: 500.0
+
+#----------------------------------
+#DenseMapping
+#----------------------------------
+DenseMapping.Resolution: 0.05
+DenseMapping.DepthImagePixelDownSample: 3
+DenseMapping.DepthThreshold: 3.5
+

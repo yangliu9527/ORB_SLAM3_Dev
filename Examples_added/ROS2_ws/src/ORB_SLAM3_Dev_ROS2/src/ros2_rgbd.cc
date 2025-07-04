@@ -19,12 +19,28 @@ using namespace std;
 class ImageGrabber : public rclcpp::Node
 {
 public:
-    ImageGrabber(ORB_SLAM3::System* pSLAM)
+    ImageGrabber(ORB_SLAM3::System* pSLAM, cv::FileStorage fSettings)
         : Node("rgbd_node"), mpSLAM(pSLAM)
     {
+        string rgb_topic = "/jetbot_camera/rgb";
+        string depth_topic = "/jetbot_camera/depth";
+        cv::FileNode rgb_topic_node = fSettings["topics.rgb"]; // t_imu = t_img+td
+        if (!rgb_topic_node.empty())
+        {
+            rgb_topic = rgb_topic_node.string();
+        }
+
+        cv::FileNode depth_topic_node = fSettings["topics.depth"];
+        if (!depth_topic_node.empty())
+        {
+            depth_topic = depth_topic_node.string();
+        }
+
+        cout << "rgb topic: " << rgb_topic << ", depth topic: "<<depth_topic<<endl;
+
         // Subscribers
-        rgb_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, "/camera/camera/color/image_raw");
-        depth_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, "/camera/camera/aligned_depth_to_color/image_raw");
+        rgb_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, rgb_topic);
+        depth_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, depth_topic);
 
         // Synchronizer
         sync_ = std::make_shared<message_filters::Synchronizer<SyncPolicy>>(SyncPolicy(10), *rgb_sub_, *depth_sub_);
@@ -82,8 +98,10 @@ int main(int argc, char** argv)
     // Create SLAM system
     ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::RGBD, true);
 
+    cv::FileStorage fSettings(argv[2], cv::FileStorage::READ);
+
     // Create the ImageGrabber node
-    auto node = std::make_shared<ImageGrabber>(&SLAM);
+    auto node = std::make_shared<ImageGrabber>(&SLAM,fSettings);
 
     // Spin the node
     rclcpp::spin(node);
