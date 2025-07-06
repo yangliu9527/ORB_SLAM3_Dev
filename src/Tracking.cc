@@ -1623,6 +1623,8 @@ void Tracking::GrabImuData(const IMU::Point &imuMeasurement)
     mlQueueImuData.push_back(imuMeasurement);
 }
 
+
+//预积分
 void Tracking::PreintegrateIMU()
 {
 
@@ -1648,19 +1650,21 @@ void Tracking::PreintegrateIMU()
         {
             unique_lock<mutex> lock(mMutexImuQueue);
             if(!mlQueueImuData.empty())
-            {
+            {   
                 IMU::Point* m = &mlQueueImuData.front();
                 cout.precision(17);
+                //如果IMU时间辍小于上一帧时间戳，跳过
                 if(m->t<mCurrentFrame.mpPrevFrame->mTimeStamp-mImuPer)
                 {
                     mlQueueImuData.pop_front();
                 }
+                //如果IMU时间小于当前帧时间戳，存放并弹出
                 else if(m->t<mCurrentFrame.mTimeStamp-mImuPer)
                 {
                     mvImuFromLastFrame.push_back(*m);
                     mlQueueImuData.pop_front();
                 }
-                else
+                else//如果IMU时间大于当前帧时间戳，存放，但不弹出，直接跳出循环（下一帧当来时，当前帧就是上一帧，可以直接使用）
                 {
                     mvImuFromLastFrame.push_back(*m);
                     break;
@@ -1682,8 +1686,10 @@ void Tracking::PreintegrateIMU()
         return;
     }
 
+    //新建IMU预积分采用上一帧的Bias
     IMU::Preintegrated* pImuPreintegratedFromLastFrame = new IMU::Preintegrated(mLastFrame.mImuBias,mCurrentFrame.mImuCalib);
 
+    //根据数据位置采用不同的插值方法，计算从上一帧的预积分和从上一个关键帧的预积分
     for(int i=0; i<n; i++)
     {
         float tstep;

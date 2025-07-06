@@ -329,6 +329,8 @@ namespace ORB_SLAM3
         return Tcw;
     }
 
+
+    //
     Sophus::SE3f System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const double &timestamp, const vector<IMU::Point> &vImuMeas, string filename)
     {
         if (mSensor != RGBD && mSensor != IMU_RGBD)
@@ -387,7 +389,7 @@ namespace ORB_SLAM3
                 mbResetActiveMap = false;
             }
         }
-
+        
         if (mSensor == System::IMU_RGBD)
             for (size_t i_imu = 0; i_imu < vImuMeas.size(); i_imu++)
                 mpTracker->GrabImuData(vImuMeas[i_imu]);
