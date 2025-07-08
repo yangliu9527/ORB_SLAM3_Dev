@@ -605,12 +605,20 @@ void Tracking::newParameterLoader(Settings *settings) {
     mInsertKFsLost = settings->insertKFsWhenLost();
     mImuFreq = settings->imuFrequency();
     mImuPer = 0.001; //1.0 / (double) mImuFreq;     //TODO: ESTO ESTA BIEN?
+
+    
     float Ng = settings->noiseGyro();
     float Na = settings->noiseAcc();
     float Ngw = settings->gyroWalk();
     float Naw = settings->accWalk();
 
     const float sf = sqrt(mImuFreq);
+    
+    //Ng*Ng = 连续时间Cov, Na*Na = 连续时间Cov
+    //公式中 连续时间Cov/delta t = 离散时间Cov
+    //所以Ng/sqrt(delta t) = sqrt(Cov/delta t)
+    //乘频率（*sf)等于除以时间间隔（1/\delta t)
+    //在Calib初始化中会再次平方获得协方差矩阵
     mpImuCalib = new IMU::Calib(Tbc,Ng*sf,Na*sf,Ngw/sf,Naw/sf);
 
     mpImuPreintegratedFromLastKF = new IMU::Preintegrated(IMU::Bias(),*mpImuCalib);

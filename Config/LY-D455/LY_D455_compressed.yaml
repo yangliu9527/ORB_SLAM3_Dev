@@ -1,10 +1,16 @@
 %YAML:1.0
+System.LoadAtlasFromFile: "SavedMap/Xinghu1705"
+#System.SaveAtlasToFile: "SavedMap/Xinghu1705"
 
 #--------------------------------------------------------------------------------------------
 # Camera Parameters. Adjust them!
 #--------------------------------------------------------------------------------------------
 File.version: "1.0"
 Camera.type: "PinHole"
+
+topics.rgb: /realsense/rgb/decompressed
+topics.depth: /realsense/depth/decompressed
+topics.imu: /camera/camera/imu
 
 # Camera calibration and distortion parameters (OpenCV) 
 Camera1.fx: 381.25641779
@@ -22,7 +28,7 @@ Camera.width: 640
 Camera.height: 480
 
 # Camera frames per second 
-Camera.fps: 15
+Camera.fps: 30
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1

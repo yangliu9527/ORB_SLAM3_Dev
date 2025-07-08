@@ -6,30 +6,23 @@
 File.version: "1.0"
 Camera.type: "PinHole"
 
-topics.rgb: /camera/camera/color/image_raw
-topics.depth: /camera/camera/aligned_depth_to_color/image_raw
-topics.imu: /camera/camera/imu
-# topics.rgb: /camera/color/image_raw
-# topics.depth: /camera/aligned_depth_to_color/image_raw
-# topics.imu: /camera/imu
-
 # Camera calibration and distortion parameters (OpenCV) 
-Camera1.fx: 378.15596479417394
-Camera1.fy: 377.14793035764535
-Camera1.cx: 329.316586935627
-Camera1.cy: 240.27224447009743
+Camera1.fx: 383.42822265625
+Camera1.fy: 328.1108093261719
+Camera1.cx: 382.98260498046875
+Camera1.cy: 239.4764862060547
 
-Camera1.k1: -0.0519725861276864
-Camera1.k2: 0.03654750744684325
-Camera1.p1: 0.0010946573801545237
-Camera1.p2: 0.0011485772694682988
-Camera1.k3: 0.0
+Camera1.k1: -0.05558899790048599
+Camera1.k2: 0.07035073637962341
+Camera1.p1: 0.0007197275408543646
+Camera1.p2: 0.0008439639932475984
+Camera1.k3: -0.023100849241018295
 
 Camera.width: 640
 Camera.height: 480
 
 # Camera frames per second 
-Camera.fps: 30
+Camera.fps: 15
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
@@ -40,34 +33,6 @@ Stereo.b: 0.07732
 
 # Depth map values factor
 RGBD.DepthMapFactor: 1000.0 # 1.0 for ROS_bag
-
-
-# Transformation from body-frame (imu) to left camera
-IMU.T_b_c1: !!opencv-matrix
-   rows: 4
-   cols: 4
-   dt: f
-   data: [0.99992252, -0.01196254, -0.00344372, -0.02752781,
-         0.01198668, 0.99990312, 0.00707586, -0.00420784,
-         0.00335874, -0.00711659, 0.99996904, -0.02998356,
-         0.0, 0.0, 0.0, 1.0]
-  #  data: [0.99992252, 0.01198668, 0.00335874, 0.02767682,
-  #        -0.01196254, 0.99990312, -0.00711659, 0.00366475,
-  #        -0.00344372, 0.00707586, 0.99996904, 0.02991761,
-  #        0.0, 0.0, 0.0, 1.0]
-
-
-# Do not insert KFs when recently lost
-IMU.InsertKFsWhenLost: 0
-
-# IMU noise (Use those from VINS-mono)
-IMU.NoiseGyro: 1e-2 # 3 # 2.44e-4 #1e-3 # rad/s^0.5
-IMU.NoiseAcc: 1e-1 #2 # 1.47e-3 #1e-2 # m/s^1.5
-IMU.GyroWalk: 1e-6 # rad/s^1.5
-IMU.AccWalk: 1e-4 # m/s^2.5
-IMU.Frequency: 200.0
-
-TimeDelay: 0.003
 
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
