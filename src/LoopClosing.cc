@@ -1322,8 +1322,10 @@ void LoopClosing::MergeLocal()
 #endif
 
     // Ensure current keyframe is updated
+    //关闭了local mapping的过程中还是process了new kf，所以这里要更新一下当前KF的共视关系
     mpCurrentKF->UpdateConnections();
 
+    
     //Get the current KF and its neighbors(visual->covisibles; inertial->temporal+covisibles)
     set<KeyFrame*> spLocalWindowKFs;
     //Get MPs in the welding area from the current map
@@ -1358,11 +1360,13 @@ void LoopClosing::MergeLocal()
         spLocalWindowKFs.insert(mpCurrentKF);
     }
 
+    //获取当前KF在这个地图的最佳25个共视KF
     vector<KeyFrame*> vpCovisibleKFs = mpCurrentKF->GetBestCovisibilityKeyFrames(numTemporalKFs);
     spLocalWindowKFs.insert(vpCovisibleKFs.begin(), vpCovisibleKFs.end());
     spLocalWindowKFs.insert(mpCurrentKF);
     const int nMaxTries = 5;
     int nNumTries = 0;
+    //获取共视KF的共视KF
     while(spLocalWindowKFs.size() < numTemporalKFs && nNumTries < nMaxTries)
     {
         vector<KeyFrame*> vpNewCovKFs;
@@ -1384,6 +1388,7 @@ void LoopClosing::MergeLocal()
         nNumTries++;
     }
 
+    //获取所有共视KF的地图点
     for(KeyFrame* pKFi : spLocalWindowKFs)
     {
         if(!pKFi || pKFi->isBad())
@@ -1416,8 +1421,10 @@ void LoopClosing::MergeLocal()
     }
     else
     {
-        spMergeConnectedKFs.insert(mpMergeMatchedKF);
+        spMergeConnectedKFs.insert(mpMergeMatchedKF);//先把匹配到的融合地图中的KF推入容器
     }
+
+    //把融合地图中的匹配KF的共视KF推入容器spMergeConnectedKFs
     vpCovisibleKFs = mpMergeMatchedKF->GetBestCovisibilityKeyFrames(numTemporalKFs);
     spMergeConnectedKFs.insert(vpCovisibleKFs.begin(), vpCovisibleKFs.end());
     spMergeConnectedKFs.insert(mpMergeMatchedKF);
@@ -1442,6 +1449,7 @@ void LoopClosing::MergeLocal()
         nNumTries++;
     }
 
+    //把融合地图中的匹配KF的共视KF的地图点推入容器spMapPointMerge
     set<MapPoint*> spMapPointMerge;
     for(KeyFrame* pKFi : spMergeConnectedKFs)
     {
@@ -1455,14 +1463,13 @@ void LoopClosing::MergeLocal()
 
     //std::cout << "[Merge]: Mm = " << to_string(pMergeMap->GetId()) << "; #KFs = " << to_string(spMergeConnectedKFs.size()) << "; #MPs = " << to_string(spMapPointMerge.size()) << std::endl;
 
-
-    //
+    //计算所有当前地图局部关键KF矫正后的初始位姿
     Sophus::SE3d Twc = mpCurrentKF->GetPoseInverse().cast<double>();
     g2o::Sim3 g2oNonCorrectedSwc(Twc.unit_quaternion(),Twc.translation(),1.0);
     g2o::Sim3 g2oNonCorrectedScw = g2oNonCorrectedSwc.inverse();
     g2o::Sim3 g2oCorrectedScw = mg2oMergeScw; //TODO Check the transformation
 
-    KeyFrameAndPose vCorrectedSim3, vNonCorrectedSim3;
+    KeyFrameAndPose vCorrectedSim3, vNonCorrectedSim3;//这几个变量其实没怎么用上（小用了一下），但基本直接用了pKF的成员变量来记录矫正位姿了
     vCorrectedSim3[mpCurrentKF]=g2oCorrectedScw;
     vNonCorrectedSim3[mpCurrentKF]=g2oNonCorrectedScw;
 
@@ -1471,6 +1478,8 @@ void LoopClosing::MergeLocal()
     vnMergeKFs.push_back(spLocalWindowKFs.size() + spMergeConnectedKFs.size());
     vnMergeMPs.push_back(spLocalWindowMPs.size() + spMapPointMerge.size());
 #endif
+
+    //计算所有当前地图局部关键KF矫正后的位姿
     for(KeyFrame* pKFi : spLocalWindowKFs)
     {
         if(!pKFi || pKFi->isBad())
@@ -1507,8 +1516,8 @@ void LoopClosing::MergeLocal()
         pKFi->mfScale = s;
         Sophus::SE3d correctedTiw(g2oCorrectedSiw.rotation(), g2oCorrectedSiw.translation() / s);
 
+        //在这里将矫正位姿赋值给pkf
         pKFi->mTcwMerge = correctedTiw.cast<float>();
-
         if(pCurrentMap->isImuInitialized())
         {
             Eigen::Quaternionf Rcor = (g2oCorrectedSiw.rotation().inverse() * vNonCorrectedSim3[pKFi].rotation()).cast<float>();
@@ -1520,6 +1529,7 @@ void LoopClosing::MergeLocal()
 
     int numPointsWithCorrection = 0;
 
+    //地图点和关键帧是差不多的处理逻辑
     //for(MapPoint* pMPi : spLocalWindowMPs)
     set<MapPoint*>::iterator itMP = spLocalWindowMPs.begin();
     while(itMP != spLocalWindowMPs.end())
@@ -1557,6 +1567,7 @@ void LoopClosing::MergeLocal()
         std::cout << "[Merge]: Ma has " << std::to_string(spLocalWindowMPs.size()) << " points" << std::endl;
     }*/
 
+    
     {
         unique_lock<mutex> currentLock(pCurrentMap->mMutexMapUpdate); // We update the current map with the Merge information
         unique_lock<mutex> mergeLock(pMergeMap->mMutexMapUpdate); // We remove the Kfs and MPs in the merged area from the old map
@@ -1573,15 +1584,16 @@ void LoopClosing::MergeLocal()
 
             //std::cout << "KF id: " << pKFi->mnId << std::endl;
 
+            //记录当前地图局部窗口内KF在融合之前的位姿
             pKFi->mTcwBefMerge = pKFi->GetPose();
             pKFi->mTwcBefMerge = pKFi->GetPoseInverse();
-            pKFi->SetPose(pKFi->mTcwMerge);
+            pKFi->SetPose(pKFi->mTcwMerge);//把融合后的矫正位姿赋值，作为其新位姿
 
             // Make sure connections are updated
             pKFi->UpdateMap(pMergeMap);
             pKFi->mnMergeCorrectedForKF = mpCurrentKF->mnId;
-            pMergeMap->AddKeyFrame(pKFi);
-            pCurrentMap->EraseKeyFrame(pKFi);
+            pMergeMap->AddKeyFrame(pKFi);//待融合地图添加该kf
+            pCurrentMap->EraseKeyFrame(pKFi);//当前地图删除该kf
 
             if(pCurrentMap->isImuInitialized())
             {
@@ -1594,21 +1606,22 @@ void LoopClosing::MergeLocal()
             if(!pMPi || pMPi->isBad())
                 continue;
 
-            pMPi->SetWorldPos(pMPi->mPosMerge);
-            pMPi->SetNormalVector(pMPi->mNormalVectorMerge);
+            pMPi->SetWorldPos(pMPi->mPosMerge);//把融合后的矫正位置赋值，作为其新位姿
+            pMPi->SetNormalVector(pMPi->mNormalVectorMerge);//把融合后的矫正法向量赋值，作为其新位姿
             pMPi->UpdateMap(pMergeMap);
-            pMergeMap->AddMapPoint(pMPi);
-            pCurrentMap->EraseMapPoint(pMPi);
+            pMergeMap->AddMapPoint(pMPi);//待融合地图添加该地图点
+            pCurrentMap->EraseMapPoint(pMPi);//当前地图删除该地图点
         }
 
-        mpAtlas->ChangeMap(pMergeMap);
-        mpAtlas->SetMapBad(pCurrentMap);
+        mpAtlas->ChangeMap(pMergeMap);//设置当前地图为融合地图
+        mpAtlas->SetMapBad(pCurrentMap);//将当前地图置坏
         pMergeMap->IncreaseChangeIndex();
         //TODO for debug
         pMergeMap->ChangeId(pCurrentMap->GetId());
 
         //std::cout << "[Merge]: merging maps finished" << std::endl;
     }
+
 
     //Rebuild the essential graph in the local window
     pCurrentMap->GetOriginKF()->SetFirstConnection(false);
