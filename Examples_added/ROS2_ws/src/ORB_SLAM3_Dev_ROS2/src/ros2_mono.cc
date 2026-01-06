@@ -39,7 +39,7 @@ public:
     {
         // Declare subscription to camera topic
         subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-            "/cam0/image_raw", 10, std::bind(&ImageGrabber::GrabImage, this, std::placeholders::_1));
+            "/camera/camera/color/image_raw", 10, std::bind(&ImageGrabber::GrabImage, this, std::placeholders::_1));
     }
 
     void GrabImage(const sensor_msgs::msg::Image::SharedPtr msg)
