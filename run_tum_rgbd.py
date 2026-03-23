@@ -21,8 +21,8 @@ print(f'evaluate cam_pose:{eva_campose}, plot figures:{plot_flag}')
 dataset_path = "/home/brain/DataSet/TUM-RGBD/"
 evaluation_workspace = "./Evaluation/TUM-RGBD/"
 
-#seq_ids =["rgbd_dataset_freiburg3_walking_xyz", "rgbd_dataset_freiburg2_desk"]
-seq_ids =["rgbd_dataset_freiburg3_walking_xyz", "rgbd_dataset_freiburg3_walking_static","rgbd_dataset_freiburg3_walking_halfsphere"]
+seq_ids =["rgbd_dataset_freiburg2_desk"]
+#seq_ids =["rgbd_dataset_freiburg3_walking_xyz", "rgbd_dataset_freiburg3_walking_static","rgbd_dataset_freiburg3_walking_halfsphere"]
 
 # select seq ids
 if (seq_id == None):

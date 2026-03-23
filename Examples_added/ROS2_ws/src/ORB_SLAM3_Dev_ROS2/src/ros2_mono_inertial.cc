@@ -21,22 +21,58 @@ using namespace std;
 class ImuGrabber : public rclcpp::Node
 {
 public:
-    ImuGrabber() : Node("imu_grabber") {}
+    ImuGrabber(cv::FileStorage &fSettings) : Node("imu_grabber")
+    {
+        string imu_topic = "/livox/imu0";
+
+        cv::FileNode imu_topic_node = fSettings["topics.imu"];
+        if (!imu_topic_node.empty())
+        {
+            imu_topic = imu_topic_node.string();
+        }
+
+        cout << "imu topic: " << imu_topic << endl;
+
+        imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
+            imu_topic,
+            1000,
+            std::bind(&ImuGrabber::GrabImu, this, std::placeholders::_1));
+    }
 
     void GrabImu(const sensor_msgs::msg::Imu::SharedPtr imu_msg);
 
     queue<sensor_msgs::msg::Imu::SharedPtr> imuBuf;
     std::mutex mBufMutex;
+
+private:
+    rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_sub_;
 };
 
 class ImageGrabber : public rclcpp::Node
 {
 public:
-    ImageGrabber(ORB_SLAM3::System *pSLAM, ImuGrabber *pImuGb, const bool bClahe, const string &paras)
+    ImageGrabber(ORB_SLAM3::System *pSLAM, ImuGrabber *pImuGb,
+                 const bool bClahe, const string &paras)
         : Node("image_grabber"), mpSLAM(pSLAM), mpImuGb(pImuGb), mbClahe(bClahe)
     {
         cv::FileStorage fSettings(paras, cv::FileStorage::READ);
-        cv::FileNode td_node = fSettings["TimeDelay"]; // t_imu = t_img+td
+
+        string image_topic = "/camera/camera/color/image_raw";
+
+        cv::FileNode image_topic_node = fSettings["topics.rgb"];
+        if (!image_topic_node.empty())
+        {
+            image_topic = image_topic_node.string();
+        }
+
+        cout << "image topic: " << image_topic << endl;
+
+        image_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
+            image_topic,
+            100,
+            std::bind(&ImageGrabber::GrabImage, this, std::placeholders::_1));
+
+        cv::FileNode td_node = fSettings["TimeDelay"];
         if (td_node.empty())
         {
             mtd = 0.0;
@@ -45,6 +81,7 @@ public:
         {
             mtd = td_node.real();
         }
+
         RCLCPP_INFO(this->get_logger(), "Calibrated time shift = %f", mtd);
     }
 
@@ -62,6 +99,9 @@ public:
 
     const bool mbClahe;
     cv::Ptr<cv::CLAHE> mClahe = cv::createCLAHE(3.0, cv::Size(8, 8));
+
+private:
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
 };
 
 void ImuGrabber::GrabImu(const sensor_msgs::msg::Imu::SharedPtr imu_msg)
@@ -141,6 +181,7 @@ void ImageGrabber::SyncWithImu()
     }
 }
 
+
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
@@ -155,13 +196,10 @@ int main(int argc, char **argv)
 
     ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::IMU_MONOCULAR, true);
 
-    auto imu_grabber = std::make_shared<ImuGrabber>();
-    auto image_grabber = std::make_shared<ImageGrabber>(&SLAM, imu_grabber.get(), bEqual, argv[2]);
+    cv::FileStorage fSettings(argv[2], cv::FileStorage::READ);
 
-    auto imu_subscription = imu_grabber->create_subscription<sensor_msgs::msg::Imu>(
-        "/livox/imu0", 1000, std::bind(&ImuGrabber::GrabImu, imu_grabber.get(), std::placeholders::_1));
-    auto image_subscription = image_grabber->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/camera/color/image_raw", 100, std::bind(&ImageGrabber::GrabImage, image_grabber.get(), std::placeholders::_1));
+    auto imu_grabber = std::make_shared<ImuGrabber>(fSettings);
+    auto image_grabber = std::make_shared<ImageGrabber>(&SLAM, imu_grabber.get(), bEqual, argv[2]);
 
     std::thread sync_thread(&ImageGrabber::SyncWithImu, image_grabber.get());
 
@@ -172,7 +210,11 @@ int main(int argc, char **argv)
     executor.spin();
 
     sync_thread.join();
-    rclcpp::shutdown();
 
+    SLAM.Shutdown();
+
+    SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
+
+    rclcpp::shutdown();
     return 0;
 }

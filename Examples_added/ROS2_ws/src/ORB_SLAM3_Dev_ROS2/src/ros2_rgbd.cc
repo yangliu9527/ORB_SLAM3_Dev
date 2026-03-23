@@ -19,7 +19,7 @@ using namespace std;
 class ImageGrabber : public rclcpp::Node
 {
 public:
-    ImageGrabber(ORB_SLAM3::System* pSLAM, cv::FileStorage fSettings)
+    ImageGrabber(ORB_SLAM3::System *pSLAM, cv::FileStorage fSettings)
         : Node("rgbd_node"), mpSLAM(pSLAM)
     {
         string rgb_topic = "/jetbot_camera/rgb";
@@ -36,7 +36,7 @@ public:
             depth_topic = depth_topic_node.string();
         }
 
-        cout << "rgb topic: " << rgb_topic << ", depth topic: "<<depth_topic<<endl;
+        cout << "rgb topic: " << rgb_topic << ", depth topic: " << depth_topic << endl;
 
         // Subscribers
         rgb_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, rgb_topic);
@@ -47,7 +47,7 @@ public:
         sync_->registerCallback(std::bind(&ImageGrabber::GrabRGBD, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    void GrabRGBD(const sensor_msgs::msg::Image::ConstSharedPtr& msgRGB, const sensor_msgs::msg::Image::ConstSharedPtr& msgD)
+    void GrabRGBD(const sensor_msgs::msg::Image::ConstSharedPtr &msgRGB, const sensor_msgs::msg::Image::ConstSharedPtr &msgD)
     {
         // Convert the ROS2 image messages to OpenCV Mat
         cv_bridge::CvImageConstPtr cv_ptrRGB;
@@ -55,7 +55,7 @@ public:
         {
             cv_ptrRGB = cv_bridge::toCvShare(msgRGB);
         }
-        catch (cv_bridge::Exception& e)
+        catch (cv_bridge::Exception &e)
         {
             RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
             return;
@@ -66,17 +66,28 @@ public:
         {
             cv_ptrD = cv_bridge::toCvShare(msgD);
         }
-        catch (cv_bridge::Exception& e)
+        catch (cv_bridge::Exception &e)
         {
             RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
             return;
         }
 
-        mpSLAM->TrackRGBD(cv_ptrRGB->image, cv_ptrD->image, msgRGB->header.stamp.sec + 1e-9 * msgRGB->header.stamp.nanosec);
+        // for data collecting
+        cv::Mat imRGB;
+        cv::cvtColor(cv_ptrRGB->image, imRGB, CV_BGR2RGB);
+
+        // double timestamp = msgRGB->header.stamp.sec + 1e-9 * msgRGB->header.stamp.nanosec;
+        // cv::Mat depthScaled;
+        // cv_ptrD->image.convertTo(depthScaled, CV_16U, 1.0);
+        // cv::imwrite("/home/brain/DataSet/SelfCollected/g1/2026020217-collected-vo/rgb/" + to_string(timestamp) + ".png", imRGB);
+        // cv::imwrite("/home/brain/DataSet/SelfCollected/g1/2026020217-collected-vo/depth/" + to_string(timestamp) + ".png", depthScaled);
+        // mpSLAM->TrackRGBD(cv_ptrRGB->image, cv_ptrD->image, msgRGB->header.stamp.sec + 1e-9 * msgRGB->header.stamp.nanosec);
+
+        mpSLAM->TrackRGBD(imRGB, cv_ptrD->image, msgRGB->header.stamp.sec + 1e-9 * msgRGB->header.stamp.nanosec);
     }
 
 private:
-    ORB_SLAM3::System* mpSLAM;
+    ORB_SLAM3::System *mpSLAM;
 
     using SyncPolicy = message_filters::sync_policies::ApproximateTime<sensor_msgs::msg::Image, sensor_msgs::msg::Image>;
     std::shared_ptr<message_filters::Synchronizer<SyncPolicy>> sync_;
@@ -84,7 +95,7 @@ private:
     std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> depth_sub_;
 };
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     // Initialize ROS2
     rclcpp::init(argc, argv);
@@ -101,7 +112,7 @@ int main(int argc, char** argv)
     cv::FileStorage fSettings(argv[2], cv::FileStorage::READ);
 
     // Create the ImageGrabber node
-    auto node = std::make_shared<ImageGrabber>(&SLAM,fSettings);
+    auto node = std::make_shared<ImageGrabber>(&SLAM, fSettings);
 
     // Spin the node
     rclcpp::spin(node);
@@ -111,6 +122,7 @@ int main(int argc, char** argv)
 
     // Save camera trajectory
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+    SLAM.SaveTrajectoryTUM("FrameTrajectory.txt");
 
     rclcpp::shutdown();
     return 0;
